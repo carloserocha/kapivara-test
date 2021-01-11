@@ -29,7 +29,7 @@ server.get('/order/', async (req, res, next) => {
 
 server.post('/order/', async (req, res, next) => {
     const data = await order.store(req.body)
-    console.log(data); process.exit();
+
     const status = data.nModified === 1 ? 201 : 200
     res.send(status, {
         ok: Boolean (data.n)
