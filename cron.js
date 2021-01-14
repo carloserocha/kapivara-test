@@ -25,7 +25,9 @@ db.on('error', (err) => {
     process.exit(1)
 })
 
-db.once('open', () => {
+db.once('open', async () => {
     const Core = require('./controller/Core')
-    Core.start(services)  
+    await Core.start(services)
+
+    console.log('cron finalizada.'); process.exit();
 })
