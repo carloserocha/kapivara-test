@@ -1,4 +1,4 @@
-const config = require('./db/config')
+const config = require('./config')
 const mongoose = require('mongoose')
 const Restify = require('restify')
 const restifyPlugins = require('restify-plugins')
@@ -20,10 +20,12 @@ server.use(restifyPlugins.queryParser({
 }))
 
 server.get('/order/', async (req, res, next) => {
-    const [ data ] = await order.getCustom(req.params)
-    res.send({
-        ...data._doc
-    })
+    const data = await order.getCustom(req.params)
+    const len = data.length
+
+    if (len === 0) { res.send(404, { orders: []}) }
+    else { res.send(302, { orders: data }) }
+
     next()
 })
 
@@ -41,7 +43,8 @@ server.listen(config.port, async () => {
     mongoose.Promise = global.Promise
 
     mongoose.connect(config.db.uri, {
-        useNewUrlParser: true
+        useNewUrlParser: true,
+        useUnifiedTopology: true
     })
 
     const db = mongoose.connection

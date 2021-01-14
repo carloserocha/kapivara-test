@@ -4,11 +4,15 @@
   "description": "��#\u0000 \u0000K\u0000a\u0000v\u0000i\u0000a\u0000r\u0000a\u0000\r\u0000 \u0000",
   "main": "index.js",
   "dependencies": {
+    "moment": "^2.29.1",
     "mongoose": "^5.11.11",
     "mongoose-string-query": "^0.2.7",
     "mongoose-timestamp": "^0.6.0",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6",
     "restify": "^8.5.1",
-    "restify-plugins": "^1.6.0"
+    "restify-plugins": "^1.6.0",
+    "xml-js": "^1.6.11"
   },
   "devDependencies": {},
   "scripts": {

@@ -1,26 +1,21 @@
 const Request = require('request-promise')
 
-const DEFAULT_URL = 'https://bling.com.br/Api/v2/'
+const { cron } = require('../../../config')
 
-async function sendOrder(Body={}) {
-    const URL = DEFAULT_URL + 'pedido/json/'
-    const METHOD = 'POST'
+async function send({url, postData=null, qs }) {
+    const query = { apikey: cron.bling, ...qs }
 
-    return await send(URL, METHOD, Body)
-}
-
-async function send(URL, Method, Body={}, QueryString={}) {
-    QueryString.apikey = process.env.BLING_API_KEY
-
-    return await Request({
-        method: 'POST',
-        url: URL,
-        body: Body,
+    const options = {
+        method: !postData ? 'GET' : 'POST',
+        url: url,
+        qs: query,
+        body: postData || {},
         json: true
-    })
+    }
+
+    return await Request(options)
 }
 
 module.exports = {
-    send,
-    sendOrder
+    send
 }
