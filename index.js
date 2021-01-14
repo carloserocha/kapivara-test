@@ -19,7 +19,18 @@ server.use(restifyPlugins.queryParser({
     mapParams: true
 }))
 
-server.get('/order/', async (req, res, next) => {
+server.get('/hook', async (req, res, next) => {
+    const data = await hook.getCustom(req.params)
+
+    const len = data.length
+
+    if (len === 0) { res.send(404, { hooks: []}) }
+    else { res.send(302, { hooks: data }) }
+
+    next()
+})
+
+server.get('/order', async (req, res, next) => {
     const data = await order.getCustom(req.params)
     const len = data.length
 
@@ -29,7 +40,7 @@ server.get('/order/', async (req, res, next) => {
     next()
 })
 
-server.post('/order/', async (req, res, next) => {
+server.post('/order', async (req, res, next) => {
     const data = await order.store(req.body)
 
     const status = data.nModified === 1 ? 201 : 200

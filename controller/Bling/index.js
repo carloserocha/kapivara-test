@@ -7,7 +7,14 @@ async function exportOrders() {
     for (const order of orders) {
         const processed = await Order.processOrder(order)
 
-        if (processed) await Model['order'].setAsIntegrated({ orderId: order.orderId, bling_integrated: true })
+        if (processed) {
+            const orderId = String (order.id)
+            const weighted_value = Number (order.weighted_value)
+            const date = Moment(order.add_time).format()
+            
+            await Model['hook'].store({orderId, weighted_value, date })
+            await Model['order'].setAsIntegrated({ orderId, bling_integrated: true })
+        }
     }
 
     return orders

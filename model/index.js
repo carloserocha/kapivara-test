@@ -7,10 +7,9 @@ class HookController {
         return data
     }
     async store(hook) {
-        const data = await Hook.update({
+        const data = await Hook.updateOne({
             orderId: hook.orderId,
-            status: hook.status
-        }, { $set: hook })
+        }, { $set: hook }, { upsert: true })
 
         return data
     }

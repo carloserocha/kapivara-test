@@ -1,7 +1,7 @@
 const API = require('../API')
 const Model = require('../../../model')
 
-const collection = 'order'
+const Moment = require('moment')
 
 async function importOrders () {
     const imported = await importOrdersByApi()
@@ -16,7 +16,7 @@ async function importOrdersByApi () {
 
     for (const order of orders.data) {
         const orderId = String (order.id)
-        await Model[collection].store({ ...order, orderId })
+        await Model['order'].store({ ...order, orderId })
     }
 
     return orders.data
