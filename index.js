@@ -24,7 +24,7 @@ server.get('/hook', async (req, res, next) => {
 
     const len = data.length
 
-    if (len === 0) { res.send(404, { hooks: []}) }
+    if (len === 0) { res.send(404, { hooks: [] }) }
     else { res.send(302, { hooks: data }) }
 
     next()
@@ -34,7 +34,7 @@ server.get('/order', async (req, res, next) => {
     const data = await order.getCustom(req.params)
     const len = data.length
 
-    if (len === 0) { res.send(404, { orders: []}) }
+    if (len === 0) { res.send(404, { orders: [] }) }
     else { res.send(302, { orders: data }) }
 
     next()
@@ -45,7 +45,7 @@ server.post('/order', async (req, res, next) => {
 
     const status = data.nModified === 1 ? 201 : 200
     res.send(status, {
-        ok: Boolean (data.n)
+        ok: Boolean(data.n)
     })
     next()
 })
@@ -66,5 +66,18 @@ server.listen(config.port, async () => {
 
     db.once('open', () => {
         console.log(`${server.name} listening at ${server.url}`)
+    })
+})
+
+
+process.on('SIGTERM', () => {
+    console.info('SIGTERM signal received')
+    server.close(() => {
+
+        console.log(`${server.name} is down`)
+        mongoose.connection.close(false, () => {
+            console.log('Database closed successfully')
+            process.exit(0)
+        })
     })
 })

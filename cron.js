@@ -26,8 +26,24 @@ db.on('error', (err) => {
 })
 
 db.once('open', async () => {
+    console.log('Core started')
+
     const Core = require('./controller/Core')
     await Core.start(services)
 
-    console.log('cron finalizada.'); process.exit();
+    console.log('Core finished')
+
+    db.close(false, () => {
+        console.log('Database closed successfully')
+        process.exit(0)
+    })
+})
+
+process.on('SIGTERM', () => {
+    console.info('SIGTERM signal received')
+
+    db.close(false, () => {
+        console.log('Database closed successfully')
+        process.exit(0)
+    })
 })
